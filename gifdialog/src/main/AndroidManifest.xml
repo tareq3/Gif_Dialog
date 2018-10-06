@@ -1,0 +1,8 @@
+<!--
+  ~ Created by Tareq Islam on 10/6/18 12:39 PM
+  ~
+  ~  Last modified 10/6/18 12:39 PM
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mti.gifdialog" />
