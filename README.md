@@ -11,10 +11,12 @@ allprojects {
   ```
   ```
   dependencies {
-	        implementation 'com.github.tareq3:Gif_Dialog:Tag'
+	         implementation 'com.github.tareq3:Gif_Dialog:2.1'
 	}
   ```
   
+  
+  <img src="dialog.gif" height="100" />
   ## Initializing
   
   ```
