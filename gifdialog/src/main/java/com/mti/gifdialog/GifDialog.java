@@ -23,10 +23,11 @@ import pl.droidsonroids.gif.GifImageView;
  * Created by Tareq on 06,October,2018.
  */
 public class GifDialog {
-    private String title,message,positiveBtnText,negativeBtnText,pBtnColor,nBtnColor;
+    private String title,message,positiveBtnText,okButtonText,negativeBtnText,pBtnColor,nBtnColor,oBtnColor,tTextColor,mTextColor;
     private Activity activity;
-    private GifDialogListener pListener,nListener;
+    private GifDialogListener pListener,nListener,oListener;
     private boolean cancel;
+
     int gifImageResource;
     public static Dialog mDialog;
 
@@ -35,11 +36,16 @@ public class GifDialog {
         this.title=builder.title;
         this.message=builder.message;
         this.activity=builder.activity;
+
         this.pListener=builder.pListener;
         this.nListener=builder.nListener;
         this.pBtnColor=builder.pBtnColor;
         this.nBtnColor=builder.nBtnColor;
+        this.oBtnColor=builder.oBtnColor;
+        this.tTextColor=builder.tTextColor;
+        this.mTextColor=builder.mTextColor;
         this.positiveBtnText=builder.positiveBtnText;
+        this.okButtonText=builder.okButtonText;
         this.negativeBtnText=builder.negativeBtnText;
         this.gifImageResource=builder.gifImageResource;
         this.cancel=builder.cancel;
@@ -54,10 +60,12 @@ public class GifDialog {
         mDialog.show();
     }
 
+
+
     public static class Builder{
-        private String title,message,positiveBtnText,negativeBtnText,pBtnColor,nBtnColor;
+        private String title,message,positiveBtnText,okButtonText,negativeBtnText,pBtnColor,oBtnColor,nBtnColor,tTextColor,mTextColor;
         private Activity activity;
-        private GifDialogListener pListener,nListener;
+        private GifDialogListener pListener,nListener,oListener;
         private boolean cancel;
         int gifImageResource;
 
@@ -80,6 +88,12 @@ public class GifDialog {
             return this;
         }
 
+        public Builder setOkBtnText(String okBtnText){
+            this.okButtonText=okBtnText;
+            return this;
+        }
+
+
         public Builder setPositiveBtnBackground(String pBtnColor){
             this.pBtnColor=pBtnColor;
             return this;
@@ -96,9 +110,28 @@ public class GifDialog {
             return this;
         }
 
+        public Builder setOkBtnBackground(String oBtnColor){
+            this.oBtnColor=oBtnColor;
+            return this;
+        }
+        public Builder setTitleTextColor(String tTextColor){
+            this.tTextColor=tTextColor;
+            return this;
+        }
+
+        public Builder setMessageTextColor(String mTextColor){
+            this.mTextColor=mTextColor;
+            return this;
+        }
         //set Positive listener
         public Builder OnPositiveClicked(GifDialogListener pListener){
             this.pListener=pListener;
+            return this;
+        }
+
+        //set Positive listener
+        public Builder OnOkClicked(GifDialogListener oListener){
+            this.oListener=oListener;
             return this;
         }
 
@@ -121,7 +154,7 @@ public class GifDialog {
         public GifDialog build(){
             TextView message1,title1;
             ImageView iconImg;
-            Button nBtn,pBtn;
+            Button nBtn,pBtn,oBtn;
             GifImageView gifImageView;
 
 
@@ -137,6 +170,8 @@ public class GifDialog {
             message1=(TextView)mDialog.findViewById(R.id.message);
             nBtn=(Button)mDialog.findViewById(R.id.negativeBtn);
             pBtn=(Button)mDialog.findViewById(R.id.positiveBtn);
+            oBtn=mDialog.findViewById(R.id.okBtn);
+
             gifImageView=mDialog.findViewById(R.id.gifImageView);
             gifImageView.setImageResource(gifImageResource);
 
@@ -144,8 +179,38 @@ public class GifDialog {
             message1.setText(message);
             if(positiveBtnText!=null)
                 pBtn.setText(positiveBtnText);
+            else
+                pBtn.setVisibility(View.GONE);
+
+            if(okButtonText!=null)
+                oBtn.setText(okButtonText);
+            else
+                oBtn.setVisibility(View.GONE);
+
+
             if(negativeBtnText!=null)
                 nBtn.setText(negativeBtnText);
+            else
+                nBtn.setVisibility(View.GONE);
+
+            if(message==null){
+                message1.setVisibility(View.GONE);
+            }
+            if(title==null){
+                title1.setVisibility(View.GONE);
+            }
+
+            if(tTextColor!=null){
+
+               title1.setTextColor(Color.parseColor(tTextColor));
+            }
+
+            if(mTextColor!=null){
+
+                message1.setTextColor(Color.parseColor(mTextColor));
+            }
+
+
             if(pBtnColor!=null)
             { GradientDrawable bgShape = (GradientDrawable)pBtn.getBackground();
                 bgShape.setColor(Color.parseColor(pBtnColor));
@@ -154,6 +219,12 @@ public class GifDialog {
             { GradientDrawable bgShape = (GradientDrawable)nBtn.getBackground();
                 bgShape.setColor(Color.parseColor(nBtnColor));
             }
+
+            if(oBtnColor!=null)
+            { GradientDrawable bgShape = (GradientDrawable)oBtn.getBackground();
+                bgShape.setColor(Color.parseColor(oBtnColor));
+            }
+
             if(pListener!=null) {
                 pBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -173,17 +244,45 @@ public class GifDialog {
                 });
             }
 
-            if(nListener!=null){
-                nBtn.setVisibility(View.VISIBLE);
-                nBtn.setOnClickListener(new View.OnClickListener() {
+
+            if(oListener!=null) {
+                oBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        nListener.onClick();
-
+                        oListener.onClick();
                         mDialog.dismiss();
                     }
                 });
             }
+            else{
+                oBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mDialog.dismiss();
+                    }
+
+                });
+            }
+                if (nListener != null) {
+
+                    nBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            nListener.onClick();
+
+                            mDialog.dismiss();
+                        }
+                    });
+
+                 }else{
+                    nBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            mDialog.dismiss();
+                        }
+                    });
+                }
 
 
            // mDialog.show();
